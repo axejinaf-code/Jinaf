@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday Mridula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --pink: #ff6fa5;
+    --pink-glow: rgba(255, 111, 165, 0.55);
+    --pink-soft: rgba(255, 170, 200, 0.85);
+    --gold: #ffd27a;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    background: #05030a;
+    overflow-x: hidden;
+    font-family: 'Dancing Script', cursive;
+  }
+
+  body {
+    position: relative;
+    background: #000000;
+    min-height: 100vh;
+  }
+
+  /* ---------- STARFIELD ---------- */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+  }
+
+  /* ---------- STAGE / 3D TILT ---------- */
+  #stage {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    width: 100%;
+    perspective: 900px;
+    overflow: hidden;
+    padding-bottom: 160px;
+  }
+
+  #tiltLayer {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    will-change: transform;
+  }
+
+  /* ---------- CENTER TITLE BLOCK ---------- */
+  #centerBlock {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 30vh;
+    transform: translateZ(100px);
+  }
+
+  #centerBlock .top-label {
+    font-family: 'Great Vibes', cursive;
+    color: #ffd7e6;
+    font-size: 30px;
+    text-shadow: 0 0 12px var(--pink-glow);
+  }
+
+  #centerBlock .big-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: 6px;
+    font-size: clamp(20px, 6.5vw, 40px);
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-top: 6px;
+    text-shadow: 0 0 18px rgba(255,255,255,0.35);
+  }
+
+  #centerBlock .sub-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: 4px;
+    font-size: clamp(16px, 4.5vw, 26px);
+    color: var(--pink);
+    text-transform: uppercase;
+    margin-top: 4px;
+    text-shadow: 0 0 14px var(--pink-glow);
+  }
+
+  .date-tag {
+    margin-top: 14px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 20px;
+    color: #ffe1ec;
+    opacity: 0.9;
+  }
+
+  /* ---------- FALLING MESSAGES (unlimited) ---------- */
+  #fallLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .fall-msg {
+    position: absolute;
+    top: -40px;
+    font-family: 'Dancing Script', cursive;
+    font-weight: 700;
+    color: var(--pink-soft);
+    text-shadow: 0 0 10px var(--pink-glow);
+    white-space: nowrap;
+    animation-name: fallDown;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fallDown {
+    0%   { transform: translateY(0) rotate(var(--r0)); opacity: 0; }
+    8%   { opacity: 0.95; }
+    92%  { opacity: 0.9; }
+    100% { transform: translateY(115vh) rotate(var(--r1)); opacity: 0; }
+  }
+
+  /* ---------- HEART BURST ON DOUBLE TAP ---------- */
+  .heart-pop {
+    position: fixed;
+    z-index: 5;
+    font-size: 20px;
+    pointer-events: none;
+    animation: popUp 1.1s ease-out forwards;
+  }
+
+  @keyframes popUp {
+    0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+    70%  { opacity: 1; }
+    100% { transform: translate(-50%, -170%) scale(1.3); opacity: 0; }
+  }
+
+  /* ---------- BOTTOM INSTRUCTION ---------- */
+  #instructions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    z-index: 6;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 16px;
+    color: #ffe3ec;
+    opacity: 0.85;
+    animation: fadePulse 2.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes fadePulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  #tiltPermBtn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 7;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    font-family: 'Dancing Script', cursive;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    display: none;
+  }
+
+  .counter-line {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    margin-top: 30px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    padding: 0 20px;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="starfield"></div>
+
+<button id="tiltPermBtn">Tap to enable motion tilt</button>
+
+<div id="stage">
+  <div id="tiltLayer">
+
+    <div id="centerBlock">
+      <div class="top-label">Happy Birthday</div>
+      <div class="big-title">To The One</div>
+      <div class="sub-name">Mridula</div>
+      <div class="date-tag">25 / 08</div>
+    </div>
+
+    <div class="counter-line" id="counterLine"></div>
+
+  </div>
+</div>
+
+<div id="fallLayer"></div>
+
+<div id="instructions">Drag with your hand to look around · Double tap for a surprise 💖</div>
+
+<script>
+
+/* ================= STARFIELD ================= */
+(function buildStars(){
+  const field = document.getElementById('starfield');
+  const frag = document.createDocumentFragment();
+  const count = 160;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.top = (Math.random() * 100) + '%';
+    star.style.left = (Math.random() * 100) + '%';
+    const size = (Math.random() * 2 + 1).toFixed(1);
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
+    star.style.animationDuration = (2 + Math.random() * 3).toFixed(2) + 's';
+    frag.appendChild(star);
+  }
+  field.appendChild(frag);
+})();
+
+/* ================= 3D FREE-LOOK (drag with hand/mouse + gyroscope) ================= */
+const tiltLayer = document.getElementById('tiltLayer');
+let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+const TILT_LIMIT = 40;
+const DRAG_SENSITIVITY = 0.22;
+
+function clampTilt(v) {
+  return Math.max(Math.min(v, TILT_LIMIT), -TILT_LIMIT);
+}
+
+function applyTilt() {
+  currentX += (targetX - currentX) * 0.055;
+  currentY += (targetY - currentY) * 0.055;
+  tiltLayer.style.transform = 'rotateX(' + currentX + 'deg) rotateY(' + currentY + 'deg)';
+  requestAnimationFrame(applyTilt);
+}
+requestAnimationFrame(applyTilt);
+
+/* Drag around freely with a finger or mouse to look at every side */
+let isDragging = false;
+let lastX = 0, lastY = 0;
+
+function dragStart(x, y) {
+  isDragging = true;
+  lastX = x;
+  lastY = y;
+}
+
+function dragMove(x, y) {
+  if (!isDragging) return;
+  const dx = x - lastX;
+  const dy = y - lastY;
+  targetY = clampTilt(targetY + dx * DRAG_SENSITIVITY);
+  targetX = clampTilt(targetX - dy * DRAG_SENSITIVITY);
+  lastX = x;
+  lastY = y;
+}
+
+function dragEnd() {
+  isDragging = false;
+}
+
+window.addEventListener('mousedown', (e) => dragStart(e.clientX, e.clientY));
+window.addEventListener('mousemove', (e) => dragMove(e.clientX, e.clientY));
+window.addEventListener('mouseup', dragEnd);
+window.addEventListener('mouseleave', dragEnd);
+
+window.addEventListener('touchstart', (e) => {
+  if (e.touches && e.touches.length) {
+    dragStart(e.touches[0].clientX, e.touches[0].clientY);
+  }
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+  if (e.touches && e.touches.length) {
+    dragMove(e.touches[0].clientX, e.touches[0].clientY);
+  }
+}, { passive: true });
+
+window.addEventListener('touchend', dragEnd);
+window.addEventListener('touchcancel', dragEnd);
+
+function handleOrientation(e) {
+  if (e.beta === null || e.gamma === null) return;
+  const beta = Math.max(Math.min(e.beta - 45, 45), -45);
+  const gamma = Math.max(Math.min(e.gamma, 45), -45);
+  targetX = clampTilt((beta / 45) * TILT_LIMIT * -1);
+  targetY = clampTilt((gamma / 45) * TILT_LIMIT);
+}
+
+function enableGyro() {
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission().then(state => {
+      if (state === 'granted') {
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    }).catch(() => {});
+  } else {
+    window.addEventListener('deviceorientation', handleOrientation);
+  }
+}
+
+const permBtn = document.getElementById('tiltPermBtn');
+if (typeof DeviceOrientationEvent !== 'undefined' &&
+    typeof DeviceOrientationEvent.requestPermission === 'function') {
+  permBtn.style.display = 'block';
+  permBtn.addEventListener('click', () => {
+    enableGyro();
+    permBtn.style.display = 'none';
+  });
+} else if (window.DeviceOrientationEvent) {
+  enableGyro();
+}
+
+/* ================= UNLIMITED FALLING MESSAGES ================= */
+const fallLayer = document.getElementById('fallLayer');
+const phrases = [
+  '🥳 Happy Birthday Mridula 🥳',
+  '💖 Happy Birthday Mridula 💖',
+  '✨ Happy Birthday Mridula ✨',
+  '🎂 Mridula 🎂',
+  'Happy Birthday to you 🎈'
+];
+let spawned = 0;
+
+function spawnMessage() {
+  const msg = document.createElement('div');
+  msg.className = 'fall-msg';
+  msg.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+
+  const left = Math.random() * 86;
+  const size = 14 + Math.random() * 10;
+  const duration = 6 + Math.random() * 6;
+  const r0 = (Math.random() * 16 - 8).toFixed(1) + 'deg';
+  const r1 = (Math.random() * 30 - 15).toFixed(1) + 'deg';
+
+  msg.style.left = left + 'vw';
+  msg.style.fontSize = size + 'px';
+  msg.style.setProperty('--r0', r0);
+  msg.style.setProperty('--r1', r1);
+  msg.style.animationDuration = duration + 's';
+
+  fallLayer.appendChild(msg);
+  spawned++;
+  updateCounter();
+
+  msg.addEventListener('animationend', () => {
+    msg.remove();
+  });
+}
+
+function updateCounter() {
+  const el = document.getElementById('counterLine');
+  el.textContent = spawned + ' wishes dropped so far... it will never stop, because there is no end to the love for Mridula 💫';
+}
+
+setInterval(spawnMessage, 260);
+for (let i = 0; i < 12; i++) {
+  setTimeout(spawnMessage, i * 90);
+}
+
+/* ================= DOUBLE TAP HEART BURST ================= */
+function burstHearts(x, y) {
+  const hearts = ['💖','💕','🎉','✨','🥳'];
+  for (let i = 0; i < 10; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-pop';
+    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    const offsetX = (Math.random() * 80 - 40);
+    h.style.left = (x + offsetX) + 'px';
+    h.style.top = y + 'px';
+    h.style.animationDelay = (Math.random() * 0.15) + 's';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1300);
+  }
+  for (let i = 0; i < 6; i++) {
+    setTimeout(spawnMessage, i * 60);
+  }
+}
+
+let lastTap = 0;
+document.addEventListener('touchend', (e) => {
+  const now = Date.now();
+  if (now - lastTap < 320) {
+    const touch = e.changedTouches[0];
+    burstHearts(touch.clientX, touch.clientY);
+  }
+  lastTap = now;
+});
+
+document.addEventListener('dblclick', (e) => {
+  burstHearts(e.clientX, e.clientY);
+});
+
+</script>
+
+</body>
+</html>
